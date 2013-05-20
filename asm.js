@@ -34,7 +34,13 @@ var matMod = Mat4(window, {}, arr);
 
 var dmat4 = {
     create: function() {
-        new Float32Array(arr.slice(0, 16 << 2));
+        return new Float32Array(arr.slice(0, 16 << 2));
+    },
+    create2: function() {
+        return new Float32Array([1, 0, 0, 0,
+                          0, 1, 0, 0,
+                          0, 0, 1, 0,
+                          0, 0, 0, 1]);
     },
     identity: function(m) {
         m[0] = 1.0;
