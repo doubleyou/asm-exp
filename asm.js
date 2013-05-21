@@ -1,161 +1,51 @@
 'use strict';
 
-function MatMath(stdlib, foreign, heap) {
+function Mat4(stdlib, foreign, heap) {
     'use asm';
 
-    var M = new stdlib.Float32Array(heap);
+    var OP1_OFFSET = 0;
+    var OP2_OFFSET = 16;
+    var OP3_OFFSET = 32;
+    var RESULT_OFFSET = 48;
+    var TABLE_OFFSET = 64;
 
-    function invert() {
-        var det = 0.0;
-        M[16] = +(+M[0] * +M[5] - +M[1] * +M[4]);       //b00
-        M[17] = +(+M[0] * +M[6] - +M[2] * +M[4]);       //b01
-        M[18] = +(+M[0] * +M[7] - +M[3] * +M[4]);       //b02
-        M[19] = +(+M[1] * +M[6] - +M[2] * +M[5]);       //b03
-        M[20] = +(+M[1] * +M[7] - +M[3] * +M[5]);       //b04
-        M[21] = +(+M[2] * +M[7] - +M[3] * +M[6]);       //b05
-        M[22] = +(+M[8] * +M[13] - +M[9] * +M[12]);     //b06
-        M[23] = +(+M[8] * +M[14] - +M[10] * +M[12]);    //b07
-        M[24] = +(+M[8] * +M[15] - +M[11] * +M[12]);    //b08
-        M[25] = +(+M[9] * +M[14] - +M[10] * +M[13]);    //b09
-        M[26] = +(+M[9] * +M[15] - +M[11] * +M[13]);    //b10
-        M[27] = +(+M[10] * +M[15] - +M[11] * +M[14]);   //b11
+    var H = new stdlib.Float32Array(heap);
 
-        det = +((+M[16]) * (+M[27]) -
-                  (+M[17]) * (+M[26]) +
-                  (+M[18]) * (+M[25]) +
-                  (+M[19]) * (+M[24]) -
-                  (+M[20]) * (+M[23]) +
-                  (+M[21]) * (+M[22]));
+    function identity(n) {
+        n = n|0;
 
-        if (det != 0.0) {
-            return 0;
-        }
+        var offset = TABLE_OFFSET|0 + (n|0 << 4);
 
-        det = +(+1.0/+det);
+        H[offset] = 1.0;
+        H[offset + 1] = 0.0;
+        H[offset + 2] = 0.0;
+        H[offset + 3] = 0.0;
+        H[offset + 4] = 0.0;
+        H[offset + 5] = 1.0;
+        H[offset + 6] = 0.0;
+        H[offset + 7] = 0.0;
+        H[offset + 8] = 0.0;
+        H[offset + 9] = 0.0;
+        H[offset + 10] = 1.0;
+        H[offset + 11] = 0.0;
+        H[offset + 12] = 0.0;
+        H[offset + 13] = 0.0;
+        H[offset + 14] = 0.0;
+        H[offset + 15] = 1.0;
 
-        M[32] = +(+(+M[5] * +M[27] - +M[6] * +M[26] + +M[7] * +M[25]) * +det);
-        M[33] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[34] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[35] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[36] = +(+(+M[5] * +M[27] - +M[6] * +M[26] + +M[7] * +M[25]) * +det);
-        M[37] = +(+(+M[5] * +M[27] - +M[6] * +M[26] + +M[7] * +M[25]) * +det);
-        M[38] = +(+(+M[5] * +M[27] - +M[6] * +M[26] + +M[7] * +M[25]) * +det);
-        M[39] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[40] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[41] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[42] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[43] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[44] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[45] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[46] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-        M[47] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
-
-        return 1;
+        return offset|0;
     }
-
-    return {
-        invert: invert
-    };
 };
 
-var arr = new ArrayBuffer(4096);
-var buf = Float32Array(arr);
-var matMod = MatMath(window, {}, arr);
+var buffer = new ArrayBuffer(65536);
+var array = Float32Array(buffer);
+var mod = Mat4(window, {}, buffer);
 
 var dmat4 = {
-    identity: function(m) {
-
-        if (!m) {
-            m = new Float32Array(16);
-        }
-
-        m[0] = 1.0;
-        m[1] = 0.0;
-        m[2] = 0.0;
-        m[3] = 0.0;
-        m[4] = 0.0;
-        m[5] = 1.0;
-        m[6] = 0.0;
-        m[7] = 0.0;
-        m[8] = 0.0;
-        m[9] = 0.0;
-        m[10] = 1.0;
-        m[11] = 0.0;
-        m[12] = 0.0;
-        m[13] = 0.0;
-        m[14] = 0.0;
-        m[15] = 1.0;
-
-        return m;
-    },
-    copy: function(m, r) {
-
-        if (!r) {
-            r = new Float32Array(16);
-        }
-
-        r[0] = m[0];
-        r[1] = m[1];
-        r[2] = m[2];
-        r[3] = m[3];
-        r[4] = m[4];
-        r[5] = m[5];
-        r[6] = m[6];
-        r[7] = m[7];
-        r[8] = m[8];
-        r[9] = m[9];
-        r[10] = m[10];
-        r[11] = m[11];
-        r[12] = m[12];
-        r[13] = m[13];
-        r[14] = m[14];
-        r[15] = m[15];
-
-        return r;
-    },
-    invert: function(m, r) {
-        buf[0] = m[0];
-        buf[1] = m[1];
-        buf[2] = m[2];
-        buf[3] = m[3];
-        buf[4] = m[4];
-        buf[5] = m[5];
-        buf[6] = m[6];
-        buf[7] = m[7];
-        buf[8] = m[8];
-        buf[9] = m[9];
-        buf[10] = m[10];
-        buf[11] = m[11];
-        buf[12] = m[12];
-        buf[13] = m[13];
-        buf[14] = m[14];
-        buf[15] = m[15];
-
-        matMod.invert();
-
-        if (!r) {
-            r = m;
-        }
-
-        r[0] = buf[0];
-        r[1] = buf[1];
-        r[2] = buf[2];
-        r[3] = buf[3];
-        r[4] = buf[4];
-        r[5] = buf[5];
-        r[6] = buf[6];
-        r[7] = buf[7];
-        r[8] = buf[8];
-        r[9] = buf[9];
-        r[10] = buf[10];
-        r[11] = buf[11];
-        r[12] = buf[12];
-        r[13] = buf[13];
-        r[14] = buf[14];
-        r[15] = buf[15];
-
-        return r;
-    }
+    counter = 0;
 };
 
-dmat4.create = dmat4.identity;
+dmat4.identity = function() {
+    var offset = mod.identity(dmat4.counter++);
+    return array.subarray(offset, offset + 16);
+};
