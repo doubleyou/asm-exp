@@ -57,3 +57,5 @@ dmat4.identity = function() {
     if (dmat4.counter > 16384) dmat4.counter = 0;
     return array.subarray(offset, offset + 16);
 };
+
+dmat4.create = dmat4.identity;
