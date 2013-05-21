@@ -114,7 +114,22 @@ var dmat4 = {
         return r;
     },
     invert: function(m, r) {
-        dmat4.copy(m, buf);
+        buf[0] = m[0];
+        buf[1] = m[1];
+        buf[2] = m[2];
+        buf[3] = m[3];
+        buf[4] = m[4];
+        buf[5] = m[5];
+        buf[6] = m[6];
+        buf[7] = m[7];
+        buf[8] = m[8];
+        buf[9] = m[9];
+        buf[10] = m[10];
+        buf[11] = m[11];
+        buf[12] = m[12];
+        buf[13] = m[13];
+        buf[14] = m[14];
+        buf[15] = m[15];
 
         matMod.invert();
 
