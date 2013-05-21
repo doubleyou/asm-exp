@@ -3,13 +3,7 @@
 function Mat4(stdlib, foreign, heap) {
     'use asm';
 
-    var OP1_OFFSET = 0;
-    var OP2_OFFSET = 16;
-    var OP3_OFFSET = 32;
-
     var H = new stdlib.Float32Array(heap);
-
-    var log = foreign.log;
 
     function matOffset(n) {
         n = n|0;
@@ -49,7 +43,7 @@ function Mat4(stdlib, foreign, heap) {
 
 var buffer = new ArrayBuffer(65536);
 var array = new Float32Array(buffer);
-var mod = Mat4(window, {log: function(a) {console.log(a); return 0;}}, buffer);
+var mod = Mat4(window, {}, buffer);
 
 var dmat4 = {
     counter: 0
