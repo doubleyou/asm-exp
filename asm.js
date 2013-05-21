@@ -7,13 +7,12 @@ function Mat4(stdlib, foreign, heap) {
     var OP2_OFFSET = 16;
     var OP3_OFFSET = 32;
     var RESULT_OFFSET = 48;
-    var TABLE_OFFSET = 256;
 
     var H = new stdlib.Float32Array(heap);
 
     var log = foreign.log;
 
-    function getOffset(n) {
+    function matOffset(n) {
         n = n|0;
         return (256 + ((n|0) << 6))|0;
     };
@@ -22,7 +21,7 @@ function Mat4(stdlib, foreign, heap) {
         n = n|0;
 
         var offset = 0;
-        offset = getOffset(n|0)|0;
+        offset = matOffset(n|0)|0;
 
         H[((offset|0)) >> 2] = 1.0;
         H[((offset|0) + 4) >> 2] = 0.0;
