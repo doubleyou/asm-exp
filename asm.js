@@ -35,6 +35,10 @@ function Mat4(stdlib, foreign, heap) {
 
         return offset|0;
     }
+
+    return {
+        identity: identity
+    };
 };
 
 var buffer = new ArrayBuffer(65536);
@@ -42,7 +46,7 @@ var array = Float32Array(buffer);
 var mod = Mat4(window, {}, buffer);
 
 var dmat4 = {
-    counter = 0;
+    counter: 0;
 };
 
 dmat4.identity = function() {
