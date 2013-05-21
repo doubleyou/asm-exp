@@ -54,7 +54,7 @@ var dmat4 = {
 
 dmat4.identity = function() {
     var offset = mod.identity(dmat4.counter++);
-    if (dmat4.counter > 16384) dmat4.counter = 0;
+//    if (dmat4.counter > 16384) dmat4.counter = 0;
     return array.subarray(offset, offset + 16);
 };
 
