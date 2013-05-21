@@ -13,11 +13,16 @@ function Mat4(stdlib, foreign, heap) {
 
     var log = foreign.log;
 
+    function getOffset(n) {
+        n = n|0;
+        return (256 + ((n|0) << 6))|0;
+    };
+
     function identity(n) {
         n = n|0;
 
         var offset = 0;
-        offset = (TABLE_OFFSET|0 + ((n|0) << 6))|0;
+        offset = getOffset(n|0)|0;
 
         H[((offset|0)) >> 2] = 1.0;
         H[((offset|0) + 4) >> 2] = 0.0;
