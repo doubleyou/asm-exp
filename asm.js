@@ -6,6 +6,7 @@ function MatMath(stdlib, foreign, heap) {
     var M = new stdlib.Float32Array(heap);
 
     function invert() {
+        var det = 0.0;
         M[16] = +(+M[0] * +M[5] - +M[1] * +M[4]);       //b00
         M[17] = +(+M[0] * +M[6] - +M[2] * +M[4]);       //b01
         M[18] = +(+M[0] * +M[7] - +M[3] * +M[4]);       //b02
@@ -19,18 +20,18 @@ function MatMath(stdlib, foreign, heap) {
         M[26] = +(+M[9] * +M[15] - +M[11] * +M[13]);    //b10
         M[27] = +(+M[10] * +M[15] - +M[11] * +M[14]);   //b11
 
-        var det = +(+M[16] * +M[27] -
-                  +M[17] * +M[26] +
-                  +M[18] * +M[25] +
-                  +M[19] * +M[24] -
-                  +M[20] * +M[23] +
-                  +M[21] * +M[22]);
+        det = +((+M[16]) * (+M[27]) -
+                  (+M[17]) * (+M[26]) +
+                  (+M[18]) * (+M[25]) +
+                  (+M[19]) * (+M[24]) -
+                  (+M[20]) * (+M[23]) +
+                  (+M[21]) * (+M[22]));
 
-        if (!det) {
-            return 0|0;
+        if (det != 0.0) {
+            return 0;
         }
 
-        det = +(1.0/+det);
+        det = +(+1.0/+det);
 
         M[32] = +(+(+M[5] * +M[27] - +M[6] * +M[26] + +M[7] * +M[25]) * +det);
         M[33] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
@@ -49,7 +50,7 @@ function MatMath(stdlib, foreign, heap) {
         M[46] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
         M[47] = +(+(+M[2] * +M[26] - +M[1] * +M[27] + +M[3] * +M[25]) * +det);
 
-        return 1|0;
+        return 1;
     }
 
     return {
@@ -115,7 +116,7 @@ var dmat4 = {
     invert: function(m, r) {
         dmat4.copy(m, buf);
 
-        if (!matMod.invert()) return null;
+        matMod.invert();
 
         if (!r) {
             r = m;
