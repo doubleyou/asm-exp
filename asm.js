@@ -4,13 +4,12 @@ function Mat4(stdlib, foreign, heap) {
     'use asm';
 
     var H = new stdlib.Float32Array(heap);
-
-    var totalMatrices = 0;
+    var I = new stdlib.Uint8Array(heap);
 
     function identity() {
         var offset = 0;
-        offset = (totalMatrices << 6)|0;
-        totalMatrices = (totalMatrices + 1)|0;
+        offset = ((I[0]|0 + 16) << 6)|0;
+        I[0] = I[0]|0 + 1;
 
         H[offset >> 2] = 1.0;
         H[(offset + 4) >> 2] = 0.0;
