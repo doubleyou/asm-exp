@@ -1,7 +1,7 @@
 'use strict';
 
 function Mat4(stdlib, foreign, heap) {
-    'use asm';
+//    'use asm';
 
     var H = new stdlib.Float32Array(heap);
     var I = new stdlib.Uint8Array(heap);
