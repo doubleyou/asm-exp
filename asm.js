@@ -49,3 +49,5 @@ dmat4.identity = function() {
 };
 
 dmat4.create = dmat4.identity;
+
+dmat4.identity();
