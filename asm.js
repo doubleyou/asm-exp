@@ -37,7 +37,7 @@ function Mat4(stdlib, foreign, heap) {
     };
 };
 
-var buffer = new ArrayBuffer(4096);
+var buffer = new ArrayBuffer(65536);
 var array = new Float32Array(buffer);
 var mod = Mat4(window, {}, buffer);
 
