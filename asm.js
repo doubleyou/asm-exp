@@ -48,3 +48,5 @@ dmat4.identity = function() {
     var offset = mod.identity(dmat4.counter++);
     return array.subarray(offset, offset + 16);
 };
+
+dmat4.create = dmat4.identity;
