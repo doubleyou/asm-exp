@@ -5,11 +5,14 @@ function Mat4(stdlib, foreign, heap) {
 
     var H = new stdlib.Float32Array(heap);
 
+    var totalMatrices = 0;
+
     function identity(n) {
         n = n|0;
 
         var offset = 0;
-        offset = (n << 6)|0;
+        offset = (totalMatrices << 6)|0;
+        totalMatrices = (totalMatrices + 1)|0;
 
         H[offset >> 2] = 1.0;
         H[(offset + 4) >> 2] = 0.0;
@@ -40,12 +43,10 @@ var buffer = new ArrayBuffer(4096);
 var array = new Float32Array(buffer);
 var mod = Mat4(window, {}, buffer);
 
-var dmat4 = {
-    counter: 0
-};
+var dmat4 = {};
 
 dmat4.identity = function() {
-    var offset = mod.identity(dmat4.counter++);
+    var offset = mod.identity();
     return array.subarray(offset, offset + 16);
 };
 
