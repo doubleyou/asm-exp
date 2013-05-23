@@ -7,9 +7,7 @@ function Mat4(stdlib, foreign, heap) {
 
     var totalMatrices = 0;
 
-    function identity(n) {
-        n = n|0;
-
+    function identity() {
         var offset = 0;
         offset = (totalMatrices << 6)|0;
         totalMatrices = (totalMatrices + 1)|0;
